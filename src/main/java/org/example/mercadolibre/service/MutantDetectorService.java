@@ -72,13 +72,16 @@ public class MutantDetectorService {
 
     private boolean isValid(String[] dna) {
         if (dna == null || dna.length == 0) {
-            return false;
+            throw new IllegalArgumentException("DNA sequence cannot be null or empty.");
         }
 
         int n = dna.length;
         for (String row : dna) {
-            if (row == null || row.length() != n || !DNA_PATTERN.matcher(row).matches()) {
-                return false;
+            if (row == null || row.length() != n) {
+                throw new IllegalArgumentException("DNA rows must not be null and must all have the same length as the number of rows (NxN matrix).");
+            }
+            if (!DNA_PATTERN.matcher(row).matches()) {
+                throw new IllegalArgumentException("DNA sequence contains invalid characters. Only A, T, C, G are allowed.");
             }
         }
         return true;

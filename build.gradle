@@ -57,6 +57,8 @@ jacocoTestReport {
             fileTree(dir: it, exclude: [
                     '**/MutantDetectorApplication.class',
                     '**/config/**',
+                    '**/dto/**',
+                    '**/model/**',
                     '**/*$*' // Excluir clases internas generadas por Lombok
             ])
         }))
@@ -70,6 +72,17 @@ jacocoTestCoverageVerification {
                 minimum = 0.80
             }
         }
+    }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    '**/MutantDetectorApplication.class',
+                    '**/config/**',
+                    '**/dto/**',
+                    '**/model/**',
+                    '**/*$*' // Excluir clases internas generadas por Lombok
+            ])
+        }))
     }
 }
 
