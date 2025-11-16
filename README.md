@@ -194,4 +194,7 @@ Una vez que el estado de tu servicio cambie a **"Live"**, podrás acceder a tu a
 - **API URL**: `https://TU_NOMBRE_DE_SERVICIO.onrender.com`
 - **Swagger UI**: `https://TU_NOMBRE_DE_SERVICIO.onrender.com/swagger-ui.html`
 
-¡Y listo! Tu API de detección de mutantes está ahora en línea.
+## 👤 Autor
+
+*   **Nombre:** Tiago Cunto Boberg
+*   **Legajo:** 52629
