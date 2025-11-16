@@ -4,30 +4,36 @@ import org.example.mercadolibre.dto.DnaRequest;
 import org.example.mercadolibre.dto.MutantStatsResponse;
 import org.example.mercadolibre.service.MutantService;
 import org.example.mercadolibre.service.StatsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
+@RequiredArgsConstructor
+@Tag(name = "Mutant Detector", description = "API para detección de mutantes")
 public class MutantController {
 
     private final MutantService mutantService;
     private final StatsService statsService;
 
-    @Autowired
-    public MutantController(MutantService mutantService, StatsService statsService) {
-        this.mutantService = mutantService;
-        this.statsService = statsService;
-    }
-
     @PostMapping("/mutant")
-    public ResponseEntity<Void> isMutant(@Valid @RequestBody DnaRequest request) {
+    @Operation(summary = "Verificar si un ADN es mutante")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Es mutante"),
+        @ApiResponse(responseCode = "403", description = "No es mutante"),
+        @ApiResponse(responseCode = "400", description = "ADN inválido")
+    })
+    public ResponseEntity<Void> isMutant(@Validated @RequestBody DnaRequest request) {
         if (mutantService.analyzeDna(request.getDna())) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
@@ -36,13 +42,12 @@ public class MutantController {
     }
 
     @GetMapping("/stats")
+    @Operation(summary = "Obtener estadísticas de ADN mutante y humano")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Estadísticas obtenidas correctamente")
+    })
     public ResponseEntity<MutantStatsResponse> getStats() {
         MutantStatsResponse stats = statsService.getMutantStats();
         return new ResponseEntity<>(stats, HttpStatus.OK);
-    }
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

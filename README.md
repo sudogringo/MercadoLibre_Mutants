@@ -148,3 +148,50 @@ docker build -t mutant-detector-api .
 docker run -p 8080:8080 mutant-detector-api
 ```
 La aplicación estará disponible en `http://localhost:8080`.
+
+---
+
+## ☁️ Despliegue en Render
+
+Esta guía te mostrará cómo desplegar la aplicación en [Render](https://render.com/), un servicio en la nube con un plan gratuito ideal para este tipo de proyectos.
+
+### Prerequisitos
+- Una cuenta de [GitHub](https://github.com/).
+- Una cuenta de [Render](https://dashboard.render.com/).
+
+### Paso 1: Subir el Proyecto a GitHub
+1. Crea un nuevo repositorio **público** en GitHub (ej. `mutant-detector-api`).
+2. Sube el código de este proyecto a tu nuevo repositorio.
+   ```bash
+   git remote add origin https://github.com/TU_USUARIO/mutant-detector-api.git
+   git branch -M main
+   git push -u origin main
+   ```
+
+### Paso 2: Crear un Nuevo "Web Service" en Render
+1. Ve a tu [Dashboard de Render](https://dashboard.render.com/).
+2. Haz clic en **"New +"** y selecciona **"Web Service"**.
+3. Conecta tu cuenta de GitHub si aún no lo has hecho.
+4. Busca y selecciona el repositorio que creaste en el Paso 1.
+
+### Paso 3: Configurar el Servicio
+En la pantalla de configuración, asegúrate de que los siguientes valores estén correctos:
+- **Name**: Elige un nombre único para tu servicio (ej. `mutant-api`).
+- **Region**: Elige una región (ej. `US East`).
+- **Runtime**: Selecciona **`Docker`**. Render detectará automáticamente tu `Dockerfile`.
+- **Root Directory**: Déjalo en blanco.
+- **Dockerfile Path**: Debería ser `./Dockerfile` por defecto.
+- **Instance Type**: Elige el plan **`Free`**.
+
+### Paso 4: Desplegar la Aplicación
+1. Haz clic en el botón **"Create Web Service"** en la parte inferior de la página.
+2. Render comenzará a construir la imagen de Docker y a desplegar tu aplicación. Puedes ver el progreso en los logs.
+3. El primer despliegue puede tardar unos minutos.
+
+### Paso 5: Acceder a la Aplicación
+Una vez que el estado de tu servicio cambie a **"Live"**, podrás acceder a tu aplicación usando la URL pública que aparece en la parte superior de la página de tu servicio en Render.
+
+- **API URL**: `https://TU_NOMBRE_DE_SERVICIO.onrender.com`
+- **Swagger UI**: `https://TU_NOMBRE_DE_SERVICIO.onrender.com/swagger-ui.html`
+
+¡Y listo! Tu API de detección de mutantes está ahora en línea.

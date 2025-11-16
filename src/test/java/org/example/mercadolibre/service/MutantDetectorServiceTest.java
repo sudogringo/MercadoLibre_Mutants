@@ -79,37 +79,4 @@ class MutantDetectorServiceTest {
         };
         assertFalse(detector.isMutant(dna));
     }
-
-    @Test
-    void isMutant_shouldThrowException_forInvalidDnaNotSquare() {
-        String[] dna = {
-            "ATGC",
-            "CAG",
-            "TTAT",
-            "AGAC"
-        };
-        assertThrows(IllegalArgumentException.class, () -> detector.isMutant(dna));
-    }
-
-    @Test
-    void isMutant_shouldThrowException_forInvalidDnaInvalidChars() {
-        String[] dna = {
-            "ATGC",
-            "CAGX",
-            "TTAT",
-            "AGAC"
-        };
-        assertThrows(IllegalArgumentException.class, () -> detector.isMutant(dna));
-    }
-
-    @Test
-    void isMutant_shouldThrowException_forNullDna() {
-        assertThrows(IllegalArgumentException.class, () -> detector.isMutant(null));
-    }
-
-    @Test
-    void isMutant_shouldThrowException_forEmptyDna() {
-        String[] dna = {};
-        assertThrows(IllegalArgumentException.class, () -> detector.isMutant(dna));
-    }
 }

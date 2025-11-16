@@ -9,6 +9,9 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "dna_record")
@@ -27,8 +30,13 @@ public class DnaRecord {
     @Column(name = "is_mutant", nullable = false)
     private boolean isMutant;
 
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
     public DnaRecord(String dnaHash, boolean isMutant) {
         this.dnaHash = dnaHash;
         this.isMutant = isMutant;
+        this.createdAt = LocalDateTime.now(); // Manually set for this constructor
     }
 }

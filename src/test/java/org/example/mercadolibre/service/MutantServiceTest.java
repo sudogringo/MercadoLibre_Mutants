@@ -9,7 +9,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,8 +39,31 @@ class MutantServiceTest {
     void setUp() {
         mutantDna = new String[]{"ATGCGA", "CAGTGC", "TTATGT", "AGAAGG", "CCCCTA", "TCACTG"};
         humanDna = new String[]{"ATGCGA", "CAGTGC", "TTATGT", "AGACGG", "GCGTCA", "TCACTG"};
-        mutantDnaHash = Arrays.hashCode(mutantDna) + "";
-        humanDnaHash = Arrays.hashCode(humanDna) + "";
+        mutantDnaHash = calculateDnaHash(mutantDna);
+        humanDnaHash = calculateDnaHash(humanDna);
+    }
+
+    private String calculateDnaHash(String[] dna) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            String dnaString = String.join("", dna);
+            byte[] encodedhash = digest.digest(dnaString.getBytes(StandardCharsets.UTF_8));
+            return bytesToHex(encodedhash);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String bytesToHex(byte[] hash) {
+        StringBuilder hexString = new StringBuilder(2 * hash.length);
+        for (byte b : hash) {
+            String hex = Integer.toHexString(0xff & b);
+            if (hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
     }
 
     @Test
