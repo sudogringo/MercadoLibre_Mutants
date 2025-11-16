@@ -1,5 +1,6 @@
 package org.example.mercadolibre.controller;
 
+import org.example.mercadolibre.dto.AnalysisResult;
 import org.example.mercadolibre.dto.DnaRequest;
 import org.example.mercadolibre.dto.MutantStatsResponse;
 import org.example.mercadolibre.service.MutantService;
@@ -11,12 +12,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,15 +31,17 @@ public class MutantController {
     @PostMapping("/mutant")
     @Operation(summary = "Verificar si un ADN es mutante")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Es mutante"),
-        @ApiResponse(responseCode = "403", description = "No es mutante"),
-        @ApiResponse(responseCode = "400", description = "ADN inválido")
+        @ApiResponse(responseCode = "200", description = "Es mutante",
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = AnalysisResult.class))),
+        @ApiResponse(responseCode = "403", description = "No es mutante",
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = AnalysisResult.class))),
+        @ApiResponse(responseCode = "400", description = "ADN inválido", content = @Content)
     })
-    public ResponseEntity<Void> isMutant(@Validated @RequestBody DnaRequest request) {
+    public ResponseEntity<AnalysisResult> isMutant(@Validated @RequestBody DnaRequest request) {
         if (mutantService.analyzeDna(request.getDna())) {
-            return new ResponseEntity<>(HttpStatus.OK);
+            return ResponseEntity.ok(new AnalysisResult("mutant"));
         } else {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new AnalysisResult("human"));
         }
     }
 

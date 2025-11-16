@@ -43,7 +43,8 @@ class MutantControllerIntegrationTest {
         mockMvc.perform(post("/mutant")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result").value("mutant"));
 
         // Verify stats
         mockMvc.perform(get("/stats"))
@@ -62,7 +63,8 @@ class MutantControllerIntegrationTest {
         mockMvc.perform(post("/mutant")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.result").value("human"));
 
         // Verify stats
         mockMvc.perform(get("/stats"))
@@ -82,13 +84,15 @@ class MutantControllerIntegrationTest {
         mockMvc.perform(post("/mutant")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result").value("mutant"));
 
         // Second request with same DNA
         mockMvc.perform(post("/mutant")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result").value("mutant"));
 
         // Verify stats - should only count once
         mockMvc.perform(get("/stats"))
@@ -107,7 +111,8 @@ class MutantControllerIntegrationTest {
         mockMvc.perform(post("/mutant")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(mutantRequest)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result").value("mutant"));
 
         // Add two humans
         String[] humanDna1 = {"ATGCGA","CAGTGC","TTATGT","AGACGG","GCGTCA","TCACTG"};
@@ -116,7 +121,8 @@ class MutantControllerIntegrationTest {
         mockMvc.perform(post("/mutant")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(humanRequest1)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.result").value("human"));
 
         String[] humanDna2 = {"GTGCGA","CAGTGC","TTATGT","AGACGG","GCGTCA","TCACTG"};
         DnaRequest humanRequest2 = new DnaRequest();
@@ -124,7 +130,8 @@ class MutantControllerIntegrationTest {
         mockMvc.perform(post("/mutant")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(humanRequest2)))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.result").value("human"));
 
         // Verify stats: 1 mutant, 2 humans, ratio 0.5
         mockMvc.perform(get("/stats"))
