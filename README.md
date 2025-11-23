@@ -4,7 +4,7 @@
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.0-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![Gradle](https://img.shields.io/badge/Gradle-8.x-blue.svg)](https://gradle.org/)
 [![Tests](https://img.shields.io/badge/Tests-27%20passing-success.svg)]()
-[![Coverage](https://img.shields.io/badge/Coverage-85%25-brightgreen.svg)]()
+[![Coverage](https://img.shields.io/badge/Coverage-97%25-brightgreen.svg)]()
 
 > 📚 API REST para detectar mutantes analizando secuencias de ADN.
 
@@ -191,8 +191,8 @@ En la pantalla de configuración, asegúrate de que los siguientes valores esté
 ### Paso 5: Acceder a la Aplicación
 Una vez que el estado de tu servicio cambie a **"Live"**, podrás acceder a tu aplicación usando la URL pública que aparece en la parte superior de la página de tu servicio en Render.
 
-- **API URL**: `https://TU_NOMBRE_DE_SERVICIO.onrender.com`
-- **Swagger UI**: `https://TU_NOMBRE_DE_SERVICIO.onrender.com/swagger-ui.html`
+- **API URL**: `https://mercadolibre-mutants.onrender.com`
+- **Swagger UI**: `https://mercadolibre-mutants.onrender.com/swagger-ui.html`
 
 ## 👤 Autor
 
